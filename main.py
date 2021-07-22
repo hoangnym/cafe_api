@@ -36,7 +36,20 @@ def home():
 @app.route("/random", methods=["GET"])
 def get_request():
     cafe = random.choice(cafes)
-    return cafe.name
+    cafe_object = jsonify(cafe={
+        "id": cafe.id,
+        "name": cafe.name,
+        "map_url": cafe.map_url,
+        "img_url": cafe.img_url,
+        "location": cafe.location,
+        "seats": cafe.seats,
+        "has_toilet": cafe.has_toilet,
+        "has_wifi": cafe.has_wifi,
+        "has_sockets": cafe.has_sockets,
+        "can_take_calls": cafe.can_take_calls,
+        "coffee_price": cafe.coffee_price
+    })
+    return cafe_object
 
 
 ## HTTP POST - Create Record
