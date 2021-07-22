@@ -24,8 +24,10 @@ class Cafe(db.Model):
     can_take_calls = db.Column(db.Boolean, nullable=False)
     coffee_price = db.Column(db.String(250), nullable=True)
 
-db.create_all()
-cafes = Cafe.query.all()
+    def to_dict(self):
+        # Use Dictionary Comprehension to do the same thing.
+        return {column.name: getattr(self, column.name) for column in self.__table__.columns}
+
 
 @app.route("/")
 def home():
@@ -35,20 +37,9 @@ def home():
 # HTTP GET - Read Record
 @app.route("/random", methods=["GET"])
 def get_request():
+    cafes = db.session.query(Cafe).all()
     cafe = random.choice(cafes)
-    cafe_object = jsonify(cafe={
-        "id": cafe.id,
-        "name": cafe.name,
-        "map_url": cafe.map_url,
-        "img_url": cafe.img_url,
-        "location": cafe.location,
-        "seats": cafe.seats,
-        "has_toilet": cafe.has_toilet,
-        "has_wifi": cafe.has_wifi,
-        "has_sockets": cafe.has_sockets,
-        "can_take_calls": cafe.can_take_calls,
-        "coffee_price": cafe.coffee_price
-    })
+    cafe_object = jsonify(cafe=cafe.to_dict())
     return cafe_object
 
 
