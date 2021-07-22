@@ -36,11 +36,17 @@ def home():
 
 # HTTP GET - Read Record
 @app.route("/random", methods=["GET"])
-def get_request():
+def get_random_request():
     cafes = db.session.query(Cafe).all()
     cafe = random.choice(cafes)
     cafe_object = jsonify(cafe=cafe.to_dict())
     return cafe_object
+
+@app.route("/all", methods=["GET"])
+def get_all():
+    all_cafes = db.session.query(Cafe).all()
+    all_cafes_object = jsonify(cafe=[cafe.to_dict() for cafe in all_cafes])
+    return all_cafes_object
 
 
 ## HTTP POST - Create Record
