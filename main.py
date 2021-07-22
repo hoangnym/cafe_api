@@ -48,6 +48,15 @@ def get_all():
     all_cafes_object = jsonify(cafe=[cafe.to_dict() for cafe in all_cafes])
     return all_cafes_object
 
+@app.route("/search")
+def search():
+    # ask for location
+    query_location = request.args.get("loc")
+    cafe = Cafe.query.filter_by(location=query_location).first()
+    if cafe:
+        return jsonify(cafe=cafe.to_dict())
+    else:
+        return jsonify(error={"Not Found": "Sorry, we don't have a cafe at that location."})
 
 ## HTTP POST - Create Record
 
